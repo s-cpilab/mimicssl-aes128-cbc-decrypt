@@ -71,6 +71,12 @@ target_include_directories(mimicssl-aes128-cbc-decrypt-shared PUBLIC
 set_target_properties(mimicssl-aes128-cbc-decrypt-shared
     PROPERTIES OUTPUT_NAME mimicssl-aes128-cbc-decrypt)
 
+# Android 16 KB page size support (required for Google Play since Nov 2025)
+# NDK r28+ compiles with 16 KB alignment by default; this flag covers r26/r27.
+if(ANDROID)
+    target_link_options(mimicssl-aes128-cbc-decrypt-shared PRIVATE -Wl,-z,max-page-size=16384)
+endif()
+
 include(GNUInstallDirs)
 install(TARGETS mimicssl-aes128-cbc-decrypt DESTINATION lib)
 install(TARGETS mimicssl-aes128-cbc-decrypt-shared DESTINATION lib)
